@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "645230614288",
+    "project_id": "uehnews",
+    "storage_bucket": "uehnews.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645230614288:android:e65551e918e5cf99347795",
+        "android_client_info": {
+          "package_name": "hoatran.st.ueh.edu.uehnews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645230614288-qdfogququ8o0om3tkd6k6cd530clstua.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hoatran.st.ueh.edu.uehnews",
+            "certificate_hash": "b773516d06887b78ea547028d24fe095ce3c18d3"
+          }
+        },
+        {
+          "client_id": "645230614288-6biml3ij8nta0erimi3fqauhj78jtgeh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBV-9PjUOOMHZSgfFoyzmMMHzdvmAt5EOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645230614288-6biml3ij8nta0erimi3fqauhj78jtgeh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

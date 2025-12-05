@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Giao diện cho Guest, với id là "guest_view" -->
+    <LinearLayout
+        android:id="@+id/guest_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng nhập để có trải nghiệm tốt hơn và viết bài."
+            android:gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+        <Button
+            android:id="@+id/btn_go_to_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng nhập / Đăng ký" />
+    </LinearLayout>
+
+    <!-- Giao diện cho người đã đăng nhập, với id là "logged_in_view" -->
+    <LinearLayout
+        android:id="@+id/logged_in_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"> <!-- Mặc định sẽ ẩn -->
+
+        <TextView
+            android:id="@+id/tv_welcome_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:text="Chào mừng, user@email.com"/>
+
+        <TextView
+            android:id="@+id/tv_user_role"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Bạn là: AUTHOR"
+            android:textAllCaps="true"
+            android:background="#DDDDDD"
+            android:padding="8dp"/>
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng xuất"
+            android:layout_marginTop="32dp"/>
+
+        <!-- TODO: Các nút chức năng cho Admin/Author sẽ được thêm vào đây -->
+
+    </LinearLayout>
+
+</LinearLayout>

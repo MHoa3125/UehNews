@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Màu chính thức UEH -->
+    <color name="ueh_blue">#005F69</color>        <!-- PANTONE 7715C -->
+    <color name="ueh_orange">#F26F33</color>      <!-- PANTONE 1645C -->
+    <color name="ueh_blue_dark">#003840</color>
+    <color name="ueh_white">#FFFFFF</color>
+    <color name="ueh_light_gray">#F5F5F5</color>
+    <color name="ueh_text_secondary">#888888</color>
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">UEHNews</string>
+        <!-- Các chuỗi khác của bạn, ví dụ: <string name="app_name">UehNews</string> -->
+
+        <!-- Dán Web Client ID của bạn vào đây -->
+        <string name="default_web_client_id" translatable="false">
+            DÁN_CLIENT_ID_BẠN_VỪA_SAO_CHÉP_VÀO_ĐÂY
+        </string>
+</resources>
