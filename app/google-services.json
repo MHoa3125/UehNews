@@ -14,11 +14,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "645230614288-3epvtu451f1ju33ps9mupbg0jjrlg9pt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hoatran.st.ueh.edu.uehnews",
+            "certificate_hash": "2a693b3f36d3608188e64fb8d7d987aea2d3f51e"
+          }
+        },
+        {
+          "client_id": "645230614288-kn7qrjvfcd3m62atv574ko4vob3rrms4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hoatran.st.ueh.edu.uehnews",
+            "certificate_hash": "726f44fdd8e39a17bf23d6914e78a5516f3990d0"
+          }
+        },
+        {
           "client_id": "645230614288-qdfogququ8o0om3tkd6k6cd530clstua.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "hoatran.st.ueh.edu.uehnews",
             "certificate_hash": "b773516d06887b78ea547028d24fe095ce3c18d3"
+          }
+        },
+        {
+          "client_id": "645230614288-t9jotjsgf8kt7a4mna9nh6uase8ofqgj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "hoatran.st.ueh.edu.uehnews",
+            "certificate_hash": "1bddcdda7551053e68c93ff6ec08112f75eec040"
           }
         },
         {
