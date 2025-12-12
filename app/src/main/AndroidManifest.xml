@@ -39,6 +39,13 @@
             android:name=".ui.admin.AdminDashboardActivity"
             android:exported="false" />
 
+        <!-- ==================== THÊM DÒNG NÀY VÀO ==================== -->
+        <activity
+            android:name=".ui.admin.ArticleApprovalActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.admin.AdminDashboardActivity"/>
+        <!-- ========================================================== -->
+
         <!-- Author Activities -->
         <activity
             android:name=".ui.author.AuthorDashboardActivity"
