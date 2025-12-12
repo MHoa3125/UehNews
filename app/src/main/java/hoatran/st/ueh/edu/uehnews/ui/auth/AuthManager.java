@@ -8,19 +8,16 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import hoatran.st.ueh.edu.uehnews.MainActivity;
 import hoatran.st.ueh.edu.uehnews.R;
 import hoatran.st.ueh.edu.uehnews.ui.admin.AdminDashboardActivity;
-import hoatran.st.ueh.edu.uehnews.ui.author.AuthorDashboardActivity;
+import hoatran.st.ueh.edu.uehnews.ui.author.AuthorDashboardActivity; // Thêm import còn thiếu
 
 public class AuthManager {
 

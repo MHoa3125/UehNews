@@ -1,71 +1,160 @@
 package hoatran.st.ueh.edu.uehnews.data.model;
 
-import com.google.firebase.firestore.ServerTimestamp;
-import java.util.Date;
-
 public class Article {
-    // Thuộc tính chung cho cả Firebase & SQLite
-    private String id; // Document ID của Firebase, cũng là Primary Key cho SQLite
+    private String id;
     private String title;
     private String content;
-    private String thumbnailUrl;
+    private String imageUrl;
+    private String status; // draft, pending, approved, rejected
+    private String authorId;
+    private String authorEmail;
+    private String categoryId;
+    private long createdAt;
+    private long updatedAt;
+    private String rejectionReason; // Lý do từ chối (nếu có)
+
+    // Thêm 2 trường còn thiếu
     private String authorName;
     private String categoryName;
-    private int viewCount;
 
-    // Thuộc tính chỉ có trên Firebase
-    private String authorId;
-    private String categoryId;
-    private String status; // "pending", "approved", "rejected"
-    private String reasonReject;
+    public Article() {
+        // Constructor rỗng cần thiết cho Firestore
+    }
 
-    @ServerTimestamp
-    private Date createdAt;
-    @ServerTimestamp
-    private Date approvedAt;
+    public Article(String id, String title, String content, String imageUrl,
+                   String status, String authorId, String authorEmail) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.authorId = authorId;
+        this.authorEmail = authorEmail;
+        this.createdAt = System.currentTimeMillis();
+        this.updatedAt = System.currentTimeMillis();
+    }
 
-    // Constructor rỗng cho Firebase
-    public Article() {}
+    public Article(String id, String title, String content, String imageUrl, String status, String authorId, String authorEmail, String categoryId, long createdAt, long updatedAt, String rejectionReason, String authorName, String categoryName) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.authorId = authorId;
+        this.authorEmail = authorEmail;
+        this.categoryId = categoryId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.rejectionReason = rejectionReason;
+        this.authorName = authorName;
+        this.categoryName = categoryName;
+    }
 
-    // Getters and Setters...
-    // (Bao gồm getter và setter cho tất cả các thuộc tính trên)
+    // Getters
+    public String getId() {
+        return id;
+    }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getContent() {
+        return content;
+    }
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-    public String getThumbnailUrl() { return thumbnailUrl; }
-    public void setThumbnailUrl(String thumbnailUrl) { this.thumbnailUrl = thumbnailUrl; }
+    public String getStatus() {
+        return status;
+    }
 
-    public String getAuthorName() { return authorName; }
-    public void setAuthorName(String authorName) { this.authorName = authorName; }
+    public String getAuthorId() {
+        return authorId;
+    }
 
-    public String getCategoryName() { return categoryName; }
-    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
+    public String getAuthorEmail() {
+        return authorEmail;
+    }
 
-    public int getViewCount() { return viewCount; }
-    public void setViewCount(int viewCount) { this.viewCount = viewCount; }
+    public String getCategoryId() {
+        return categoryId;
+    }
 
-    public String getAuthorId() { return authorId; }
-    public void setAuthorId(String authorId) { this.authorId = authorId; }
+    public long getCreatedAt() {
+        return createdAt;
+    }
 
-    public String getCategoryId() { return categoryId; }
-    public void setCategoryId(String categoryId) { this.categoryId = categoryId; }
+    public long getUpdatedAt() {
+        return updatedAt;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
 
-    public String getReasonReject() { return reasonReject; }
-    public void setReasonReject(String reasonReject) { this.reasonReject = reasonReject; }
+    // Thêm getters cho 2 trường mới
+    public String getAuthorName() {
+        return authorName;
+    }
 
-    public Date getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+    public String getCategoryName() {
+        return categoryName;
+    }
 
-    public Date getApprovedAt() { return approvedAt; }
-    public void setApprovedAt(Date approvedAt) { this.approvedAt = approvedAt; }
+    // Setters
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    public void setAuthorEmail(String authorEmail) {
+        this.authorEmail = authorEmail;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(long updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setRejectionReason(String rejectionReason) {
+        this.rejectionReason = rejectionReason;
+    }
+
+    // Thêm setters cho 2 trường mới
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }

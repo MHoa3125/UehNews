@@ -16,7 +16,41 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="32dp"/>
+        android:layout_marginBottom="24dp"/>
+
+    <!-- Thêm khối thống kê -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:id="@+id/tv_total_articles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng bài viết: 0"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_pending_articles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Chờ duyệt: 0"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_approved_articles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Đã duyệt: 0"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_write_article"

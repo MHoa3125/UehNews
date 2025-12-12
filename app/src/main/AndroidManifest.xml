@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- SỬA 1: Thẻ application cần có các thuộc tính và được đóng đúng cách -->
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -24,21 +29,36 @@
             </intent-filter>
         </activity>
 
-        <!-- LoginActivity là màn hình phụ -->
+        <!-- Auth Activities -->
         <activity
             android:name=".ui.auth.LoginActivity"
             android:exported="false" />
 
-        <!-- ... các activity khác ... -->
-
+        <!-- Admin Activities -->
         <activity
             android:name=".ui.admin.AdminDashboardActivity"
             android:exported="false" />
 
+        <!-- Author Activities -->
         <activity
             android:name=".ui.author.AuthorDashboardActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.author.WriteArticleActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.author.AuthorDashboardActivity"/>
+
+        <activity
+            android:name=".ui.author.PreviewArticleActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.author.WriteArticleActivity"/>
+
+        <activity
+            android:name=".ui.author.MyArticlesActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.author.AuthorDashboardActivity"/>
+
     </application>
 
-</manifest> <!-- SỬA 3: Thẻ manifest phải đóng ngoài cùng -->
+</manifest>
