@@ -14,6 +14,18 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_dashboard);
 
+        // --- Xử lý cho nút Duyệt Bài Viết ---
+        // Lấy đúng ID từ file admin_dashboard.xml
+        Button btnReviewArticles = findViewById(R.id.btn_review_articles);
+
+        btnReviewArticles.setOnClickListener(v -> {
+            // Mở màn hình duyệt bài
+            Intent intent = new Intent(AdminDashboardActivity.this, ArticleApprovalActivity.class);
+            startActivity(intent);
+        });
+
+        // --- Xử lý cho nút Đăng Xuất ---
+        // Lấy đúng ID từ file admin_dashboard.xml
         Button btnLogout = findViewById(R.id.btn_admin_logout);
         btnLogout.setOnClickListener(v -> {
             AuthManager.signOut(this);
@@ -23,5 +35,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        // Bạn có thể thêm code xử lý cho các nút "Quản lý Danh mục" và "Quản lý Tài khoản" ở đây nếu cần
+        // Button btnManageCategories = findViewById(R.id.btn_manage_categories);
+        // Button btnManageAccounts = findViewById(R.id.btn_manage_accounts);
     }
 }
