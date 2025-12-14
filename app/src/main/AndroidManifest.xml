@@ -39,12 +39,22 @@
             android:name=".ui.admin.AdminDashboardActivity"
             android:exported="false" />
 
-        <!-- ==================== THÊM DÒNG NÀY VÀO ==================== -->
         <activity
             android:name=".ui.admin.ArticleApprovalActivity"
             android:exported="false"
             android:parentActivityName=".ui.admin.AdminDashboardActivity"/>
-        <!-- ========================================================== -->
+
+        <activity
+            android:name=".ui.admin.ManageCategoriesActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.admin.AdminDashboardActivity"
+            android:label="Quản lý danh mục" />
+
+        <!-- Mới thêm: Màn hình danh sách bài viết theo danh mục -->
+        <activity
+            android:name=".ui.categories.CategoryArticlesActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
 
         <!-- Author Activities -->
         <activity
