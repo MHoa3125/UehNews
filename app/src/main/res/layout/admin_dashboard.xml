@@ -1,55 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="top"
+    android:background="@color/ueh_light_gray"
     tools:context=".ui.admin.AdminDashboardActivity">
 
-    <TextView
-        android:id="@+id/tv_admin_welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TRANG QUẢN TRỊ VIÊN"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="32dp"/>
-
-    <Button
-        android:id="@+id/btn_manage_categories"
+    <!-- 1. Thanh tiêu đề (App Bar) với màu xanh UEH -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Quản lý Danh mục"
-        android:layout_marginBottom="16dp"/>
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/btn_manage_accounts"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_admin"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/ueh_blue"
+            app:title="Trang Quản Trị Viên"
+            app:titleCentered="true"
+            app:titleTextColor="@color/ueh_white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 2. Nội dung chính của trang -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Quản lý Tài khoản"
-        android:layout_marginBottom="16dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <Button
-        android:id="@+id/btn_review_articles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Duyệt bài viết"
-        android:layout_marginBottom="16dp"/>
+        <!-- Lời chào (ID được giữ nguyên) -->
+        <TextView
+            android:id="@+id/tv_admin_welcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="Xin chào, Admin!"
+            android:textColor="@color/ueh_blue_dark"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        <!-- Các nút chức năng được đổi sang MaterialButton và có 3 màu khác nhau -->
+        <!-- ID của các nút được giữ nguyên -->
 
-    <!-- SỬA LỖI: Thêm id chính xác cho Button đăng xuất -->
-    <Button
-        android:id="@+id/btn_admin_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Đăng xuất"/>
+        <!-- Nút 1: Màu Cam UEH -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_manage_categories"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/ueh_orange"
+            android:paddingVertical="12dp"
+            android:text="Quản lý Danh mục"
+            android:textColor="@color/ueh_white" />
 
-</LinearLayout>
+        <!-- Nút 2: Màu Xanh UEH -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_manage_accounts"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/ueh_blue"
+            android:paddingVertical="12dp"
+            android:text="Quản lý Tài khoản"
+            android:textColor="@color/ueh_white" />
+
+        <!-- Nút 3: Màu Xanh Đậm UEH -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_review_articles"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/ueh_blue_dark"
+            android:paddingVertical="12dp"
+            android:text="Duyệt bài viết"
+            android:textColor="@color/ueh_white" />
+
+        <!-- Đẩy nút Đăng xuất xuống cuối -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
+        <!-- Nút đăng xuất (ID được giữ nguyên) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_admin_logout"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Đăng xuất"
+            android:textColor="@color/ueh_orange"
+            app:icon="@drawable/ic_logout"
+            app:iconTint="@color/ueh_orange" />
+
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

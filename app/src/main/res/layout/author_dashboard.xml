@@ -1,81 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="top"
+    android:background="@color/ueh_light_gray"
     tools:context=".ui.author.AuthorDashboardActivity">
 
-    <TextView
-        android:id="@+id/tv_author_welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TRANG TÁC GIẢ"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="24dp"/>
-
-    <!-- Thêm khối thống kê -->
-    <LinearLayout
+    <!-- 1. Thanh tiêu đề (App Bar) với màu xanh UEH -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_author"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/ueh_blue"
+            app:title="Trang Tác Giả"
+            app:titleCentered="true"
+            app:titleTextColor="@color/ueh_white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 2. Nội dung chính của trang -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="@android:drawable/dialog_holo_light_frame"
-        android:layout_marginBottom="24dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!-- Lời chào -->
         <TextView
-            android:id="@+id/tv_total_articles"
+            android:id="@+id/tv_author_welcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textColor="@color/ueh_blue_dark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Xin chào, tác giả!" />
+
+        <!-- 3. Khối thống kê trong CardView hiện đại -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Thống kê bài viết"
+                    android:textColor="@color/ueh_blue"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Dòng cho "Tổng cộng" -->
+                <TextView
+                    android:id="@+id/tv_total_articles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_total_articles"
+                    android:drawablePadding="12dp"
+                    android:gravity="center_vertical"
+                    android:text="Tổng cộng: 0"
+                    android:textColor="@color/ueh_blue_dark"
+                    android:textSize="16sp" />
+
+                <!-- Dòng cho "Chờ duyệt" -->
+                <TextView
+                    android:id="@+id/tv_pending_articles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/ic_pending"
+                    android:drawablePadding="12dp"
+                    android:gravity="center_vertical"
+                    android:text="Chờ duyệt: 0"
+                    android:textColor="@color/ueh_blue_dark"
+                    android:textSize="16sp" />
+
+                <!-- Dòng cho "Đã duyệt" -->
+                <TextView
+                    android:id="@+id/tv_approved_articles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:drawableStart="@drawable/ic_approved"
+                    android:drawablePadding="12dp"
+                    android:gravity="center_vertical"
+                    android:text="Đã duyệt: 0"
+                    android:textColor="@color/ueh_blue_dark"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 4. Các nút chức năng chính -->
+
+        <!-- Nút Viết bài mới -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_write_article"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/ueh_orange"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="Viết bài mới"
+            android:textColor="@color/ueh_white"
+            app:iconTint="@color/ueh_white" />
+
+        <!-- Nút Quản lý bài viết -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_manage_my_articles"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="Quản lý bài viết của tôi"
+            android:textColor="@color/ueh_blue"
+            app:iconTint="@color/ueh_blue"
+            app:strokeColor="@color/ueh_blue" />
+
+        <!-- Đẩy nút Đăng xuất xuống cuối -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- 5. Nút đăng xuất với icon và style khác biệt -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_author_logout"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tổng bài viết: 0"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_pending_articles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Chờ duyệt: 0"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_approved_articles"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Đã duyệt: 0"
-            android:textSize="16sp" />
+            android:layout_gravity="center_horizontal"
+            android:text="Đăng xuất"
+            android:textColor="@color/ueh_orange"
+            app:icon="@drawable/ic_logout"
+            app:iconTint="@color/ueh_orange" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_write_article"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Viết bài mới"
-        android:layout_marginBottom="16dp"/>
-
-    <Button
-        android:id="@+id/btn_manage_my_articles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Quản lý bài viết của tôi"
-        android:layout_marginBottom="16dp"/>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/btn_author_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Đăng xuất"/>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
