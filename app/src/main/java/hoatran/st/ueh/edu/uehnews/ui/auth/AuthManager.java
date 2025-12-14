@@ -32,7 +32,7 @@ public class AuthManager {
     // Thay thế bằng email của bạn để kiểm thử
     private static final Set<String> ADMIN_EMAILS = new HashSet<>(Arrays.asList(
             "admin1@ueh.edu.vn",
-            "hoatran.31231023175@st.ueh.edu.vn" // Ví dụ
+            "hoatran.31231023175@st.ueh.edu.vn", "nntnguyen1885@gmail.com" // Ví dụ
     ));
 
     // Logic hiện tại: Bất kỳ ai đăng nhập không phải Admin đều là Author
