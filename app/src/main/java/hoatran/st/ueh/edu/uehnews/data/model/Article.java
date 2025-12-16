@@ -1,6 +1,9 @@
 package hoatran.st.ueh.edu.uehnews.data.model;
 
-public class Article {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Article implements Parcelable {
     private String id;
     private String title;
     private String content;
@@ -49,6 +52,56 @@ public class Article {
         this.authorName = authorName;
         this.categoryName = categoryName;
     }
+
+    protected Article(Parcel in) {
+        id = in.readString();
+        title = in.readString();
+        content = in.readString();
+        imageUrl = in.readString();
+        status = in.readString();
+        authorId = in.readString();
+        authorEmail = in.readString();
+        categoryId = in.readString();
+        createdAt = in.readLong();
+        updatedAt = in.readLong();
+        rejectionReason = in.readString();
+        authorName = in.readString();
+        categoryName = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(title);
+        dest.writeString(content);
+        dest.writeString(imageUrl);
+        dest.writeString(status);
+        dest.writeString(authorId);
+        dest.writeString(authorEmail);
+        dest.writeString(categoryId);
+        dest.writeLong(createdAt);
+        dest.writeLong(updatedAt);
+        dest.writeString(rejectionReason);
+        dest.writeString(authorName);
+        dest.writeString(categoryName);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Article> CREATOR = new Creator<Article>() {
+        @Override
+        public Article createFromParcel(Parcel in) {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
 
     // Getters
     public String getId() {

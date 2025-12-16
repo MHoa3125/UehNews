@@ -1,4 +1,4 @@
-package hoatran.st.ueh.edu.uehnews.ui.home;
+package hoatran.st.ueh.edu.uehnews.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;

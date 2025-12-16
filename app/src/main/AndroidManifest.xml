@@ -76,6 +76,29 @@
             android:exported="false"
             android:parentActivityName=".ui.author.AuthorDashboardActivity"/>
 
+        <!-- Common/Guest Activities -->
+        <activity
+            android:name=".ui.activities.ArticleDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".ui.activities.ArticleSearchActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".ui.activities.FavoritesActivity"
+            android:exported="false"
+            android:label="Bài viết yêu thích"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".ui.activities.HistoryActivity"
+            android:exported="false"
+            android:label="Lịch sử đã xem"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>
