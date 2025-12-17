@@ -1,4 +1,4 @@
-package hoatran.st.ueh.edu.uehnews.ui.GUEST;
+package hoatran.st.ueh.edu.uehnews.ui.guest;
 
 import android.os.Bundle;
 import android.text.format.DateFormat;

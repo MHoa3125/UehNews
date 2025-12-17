@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import hoatran.st.ueh.edu.uehnews.ui.activities.ArticleSearchActivity;
+import hoatran.st.ueh.edu.uehnews.ui.admin.AdminDashboardActivity;
+import hoatran.st.ueh.edu.uehnews.ui.auth.AuthManager;
+import hoatran.st.ueh.edu.uehnews.ui.author.AuthorDashboardActivity;
 import hoatran.st.ueh.edu.uehnews.ui.categories.CategoriesFragment;
 import hoatran.st.ueh.edu.uehnews.ui.home.HomeFragment;
 import hoatran.st.ueh.edu.uehnews.ui.profile.ProfileFragment;
@@ -22,6 +25,25 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // --- SỬA LỖI: Kiểm tra vai trò và chuyển hướng NGAY LẬP TỨC ---
+        String currentUserRole = AuthManager.getCurrentRole(this);
+
+        // Nếu là Admin, chuyển đến trang Admin và đóng MainActivity
+        if (AuthManager.ROLE_ADMIN.equals(currentUserRole)) {
+            startActivity(new Intent(this, AdminDashboardActivity.class));
+            finish();
+            return; // Dừng việc thực thi onCreate của MainActivity ở đây
+        }
+
+        // Nếu là Author, chuyển đến trang Author và đóng MainActivity
+        if (AuthManager.ROLE_AUTHOR.equals(currentUserRole)) {
+            startActivity(new Intent(this, AuthorDashboardActivity.class));
+            finish();
+            return; // Dừng việc thực thi onCreate của MainActivity ở đây
+        }
+
+        // --- Nếu là GUEST, tiếp tục hiển thị giao diện của MainActivity ---
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);

@@ -39,6 +39,13 @@
             android:name=".ui.admin.AdminDashboardActivity"
             android:exported="false" />
 
+        <!-- SỬA LỖI: Thêm khai báo cho ManageAuthorsActivity -->
+        <activity
+            android:name=".ui.admin.ManageAuthorsActivity"
+            android:exported="false"
+            android:label="Quản lý tài khoản Tác giả"
+            android:parentActivityName=".ui.admin.AdminDashboardActivity"/>
+
         <activity
             android:name=".ui.admin.ArticleApprovalActivity"
             android:exported="false"

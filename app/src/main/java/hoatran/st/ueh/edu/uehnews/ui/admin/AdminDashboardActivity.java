@@ -28,6 +28,14 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        // --- Xử lý cho nút Quản lý Tài khoản (Tác giả) ---
+        Button btnManageAccounts = findViewById(R.id.btn_manage_accounts);
+        btnManageAccounts.setOnClickListener(v -> {
+            // Mở màn hình quản lý tác giả mà chúng ta vừa tạo
+            Intent intent = new Intent(AdminDashboardActivity.this, ManageAuthorsActivity.class);
+            startActivity(intent);
+        });
+
         // --- Xử lý cho nút Đăng Xuất ---
         Button btnLogout = findViewById(R.id.btn_admin_logout);
         btnLogout.setOnClickListener(v -> {
@@ -37,7 +45,5 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-
-        // Button btnManageAccounts = findViewById(R.id.btn_manage_accounts);
     }
 }

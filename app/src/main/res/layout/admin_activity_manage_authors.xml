@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ueh_light_gray"
+    tools:context=".ui.admin.ManageAuthorsActivity">
+
+    <!-- 1. Thanh tiêu đề (App Bar) -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout" 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_manage_authors"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/ueh_blue"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="Quản lý Tác giả"
+            app:titleTextColor="@color/ueh_white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Bổ sung: Thêm một RelativeLayout để chứa ghi chú và RecyclerView -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- 2. Ghi chú hướng dẫn -->
+        <TextView
+            android:id="@+id/tv_instruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:padding="12dp"
+            android:background="#EFEFEF"
+            android:text="Gạt để Bật/Tắt quyền đăng nhập của tác giả."
+            android:textColor="@color/ueh_text_gray"
+            android:textSize="14sp" />
+
+        <!-- 3. Danh sách các tác giả -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_authors"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/tv_instruction"
+            android:clipToPadding="false"
+            android:padding="8dp"
+            tools:listitem="@layout/admin_item_author" />
+
+    </RelativeLayout>
+
+    <!-- 4. Nút nổi để thêm tác giả mới -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/ueh_orange"
+        android:src="@drawable/ic_add"
+        app:tint="@color/ueh_white"
+        android:contentDescription="Thêm tác giả mới" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
