@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Phần thông tin người dùng -->
+    <de.hdodenhof.circleimageview.CircleImageView
+    android:id="@+id/iv_user_avatar"
+    android:layout_width="96dp"
+    android:layout_height="96dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="24dp"
+    android:src="@drawable/ic_profile_placeholder"
+    app:civ_border_color="#FF000000"
+    app:civ_border_width="2dp" />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:text="User Name" />
+
+    <TextView
+        android:id="@+id/tv_user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp"
+        tools:text="user.email@example.com" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="?android:attr/listDivider" />
+
+    <!-- Các nút chức năng -->
+    <LinearLayout
+        android:id="@+id/layout_user_options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
+
+        <!-- Nút Trang quản trị (chỉ hiển thị cho Admin) -->
+        <Button
+            android:id="@+id/btn_admin_dashboard"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:text="Trang quản trị"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <!-- Nút Viết bài (chỉ hiển thị cho Author) -->
+        <Button
+            android:id="@+id/btn_author_dashboard"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:text="Trang dành cho tác giả"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <!-- Các nút chung -->
+        <Button
+            android:id="@+id/btn_my_articles"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:text="Bài viết của tôi" />
+
+        <Button
+            android:id="@+id/btn_saved_articles_user"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:text="Bài viết đã lưu" />
+
+        <Button
+            android:id="@+id/btn_recent_articles_user"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:text="Lịch sử đã xem" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Nút Đăng xuất -->
+    <Button
+        android:id="@+id/btn_logout"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Đăng xuất"
+        android:textColor="@color/ueh_orange"
+        app:strokeColor="@color/ueh_orange" />
+
+</LinearLayout>

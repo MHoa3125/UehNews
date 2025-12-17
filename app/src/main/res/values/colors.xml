@@ -7,4 +7,8 @@
     <color name="ueh_white">#FFFFFF</color>
     <color name="ueh_light_gray">#F5F5F5</color>
     <color name="ueh_text_secondary">#888888</color>
+
+    <!-- SỬA LỖI: Bổ sung màu còn thiếu mà tôi đã dùng ở layout -->
+    <color name="ueh_text_gray">#616161</color>
+
 </resources>

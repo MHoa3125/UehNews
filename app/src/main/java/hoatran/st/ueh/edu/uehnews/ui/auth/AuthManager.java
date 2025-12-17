@@ -1,8 +1,10 @@
 package hoatran.st.ueh.edu.uehnews.ui.auth;
 
 import android.app.Activity;
-import android.content.Context;import android.content.Intent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -10,97 +12,138 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import hoatran.st.ueh.edu.uehnews.MainActivity;
 import hoatran.st.ueh.edu.uehnews.R;
+import hoatran.st.ueh.edu.uehnews.data.model.User;
 import hoatran.st.ueh.edu.uehnews.ui.admin.AdminDashboardActivity;
-import hoatran.st.ueh.edu.uehnews.ui.author.AuthorDashboardActivity; // Thêm import còn thiếu
+import hoatran.st.ueh.edu.uehnews.ui.author.AuthorDashboardActivity;
 
 public class AuthManager {
 
+    private static final String TAG = "AuthManager";
     private static final String PREFS_NAME = "app_prefs";
     private static final String KEY_USER_ROLE = "user_role";
-    private static final String KEY_USER_EMAIL = "user_email";
-    private static final String ROLE_ADMIN = "admin";
-    private static final String ROLE_AUTHOR = "author";
-    private static final String ROLE_GUEST = "guest";
 
-    // --- DANH SÁCH EMAIL PHÂN QUYỀN ---
-    // Thay thế bằng email của bạn để kiểm thử
+    public static final String ROLE_ADMIN = "admin";
+    public static final String ROLE_AUTHOR = "author";
+    public static final String ROLE_GUEST = "guest";
+
     private static final Set<String> ADMIN_EMAILS = new HashSet<>(Arrays.asList(
             "admin1@ueh.edu.vn",
-            "hoatran.31231023175@st.ueh.edu.vn", "nntnguyen1885@gmail.com" // Ví dụ
+            "hoatran.31231023175@st.ueh.edu.vn",
+            "nntnguyen1885@gmail.com"
     ));
 
-    // Logic hiện tại: Bất kỳ ai đăng nhập không phải Admin đều là Author
-    // Nếu bạn muốn có danh sách Author cụ thể, hãy tạo một Set tương tự ADMIN_EMAILS
-
-    /**
-     * Xử lý logic sau khi đăng nhập Google thành công.
-     * Hàm này sẽ phân quyền và chuyển hướng đến màn hình phù hợp.
-     * @param activity Activity hiện tại (thường là LoginActivity)
-     * @param user Đối tượng FirebaseUser vừa đăng nhập thành công
-     */
     public static void handleLoginSuccess(Activity activity, FirebaseUser user) {
-        if (user == null) {
+        if (user == null || user.getEmail() == null) {
             handleLoginFailure(activity, "Lỗi: Không lấy được thông tin người dùng.");
             return;
         }
 
         String email = user.getEmail();
-        SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Lưu email người dùng
-        editor.putString(KEY_USER_EMAIL, email);
-
-        // Phân quyền dựa trên email
-        String role = ROLE_AUTHOR; // Mặc định tất cả người dùng là Author
-        if (email != null && ADMIN_EMAILS.contains(email.toLowerCase())) {
-            role = ROLE_ADMIN;
+        if (ADMIN_EMAILS.contains(email)) {
+            Log.d(TAG, "Đăng nhập với quyền ADMIN (từ danh sách cố định): " + email);
+            saveRoleAndRedirect(activity, ROLE_ADMIN);
+            return;
         }
 
-        // Lưu vai trò vào SharedPreferences
-        editor.putString(KEY_USER_ROLE, role);
-        editor.apply();
+        db.collection("users").document(email).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document != null && document.exists()) {
+                            User dbUser = document.toObject(User.class);
+                            if (dbUser == null) {
+                                handleLoginFailure(activity, "Lỗi đọc dữ liệu người dùng.");
+                                signOut(activity);
+                                return;
+                            }
 
-        // Chuyển hướng đến màn hình tương ứng với vai trò
-        Intent intent;
-        if (role.equals(ROLE_ADMIN)) {
-            // Nếu là Admin, chuyển đến Admin Dashboard
-            intent = new Intent(activity, AdminDashboardActivity.class);
-        } else {
-            // Nếu là Author, chuyển đến Author Dashboard
-            intent = new Intent(activity, AuthorDashboardActivity.class);
-        }
+                            // SỬA LỖI GỐC: Gọi đúng phương thức isActive() đã được chú thích
+                            if (!dbUser.isActive()) {
+                                handleLoginFailure(activity, "Tài khoản của bạn đã bị vô hiệu hóa.");
+                                signOut(activity);
+                                return;
+                            }
 
-        // Xóa tất cả các activity cũ khỏi stack và mở màn hình mới
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        activity.startActivity(intent);
-        activity.finish(); // Đóng LoginActivity
+                            String role = dbUser.getRole();
+                            if (ROLE_ADMIN.equals(role)) {
+                                role = ROLE_GUEST;
+                                Log.w(TAG, "Phát hiện email không thuộc danh sách admin nhưng có vai trò admin trong DB. Đã hạ quyền: " + email);
+                            }
+                            saveRoleAndRedirect(activity, role);
+                        } else {
+                            createNewUser(activity, user, db);
+                        }
+                    } else {
+                        Log.e(TAG, "Lỗi khi kiểm tra vai trò: ", task.getException());
+                        handleLoginFailure(activity, "Không thể xác thực vai trò. Vui lòng thử lại.");
+                        signOut(activity);
+                    }
+                });
     }
 
-    /**
-     * Xử lý khi đăng nhập thất bại.
-     * @param context Context để hiển thị Toast
-     * @param errorMessage Thông báo lỗi
-     */
+    private static void createNewUser(Activity activity, FirebaseUser user, FirebaseFirestore db) {
+        String email = user.getEmail();
+        String name = user.getDisplayName();
+        String photoUrl = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : "";
+
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("email", email);
+        newUser.put("displayName", name);
+        newUser.put("photoUrl", photoUrl);
+        newUser.put("role", ROLE_GUEST);
+        newUser.put("isActive", true);
+        newUser.put("createdAt", System.currentTimeMillis());
+
+        db.collection("users").document(email).set(newUser)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Tạo người dùng mới thành công: " + email);
+                    saveRoleAndRedirect(activity, ROLE_GUEST);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Lỗi khi tạo người dùng mới: ", e);
+                    handleLoginFailure(activity, "Không thể tạo tài khoản mới. Vui lòng thử lại.");
+                    signOut(activity);
+                });
+    }
+
+    private static void saveRoleAndRedirect(Activity activity, String role) {
+        SharedPreferences prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString(KEY_USER_ROLE, role).apply();
+
+        Intent intent;
+        if (ROLE_ADMIN.equals(role)) {
+            intent = new Intent(activity, AdminDashboardActivity.class);
+        } else if (ROLE_AUTHOR.equals(role)) {
+            intent = new Intent(activity, AuthorDashboardActivity.class);
+        } else {
+            intent = new Intent(activity, MainActivity.class);
+        }
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        activity.startActivity(intent);
+        activity.finish();
+    }
+
     public static void handleLoginFailure(Context context, String errorMessage) {
         Toast.makeText(context, "Đăng nhập thất bại: " + errorMessage, Toast.LENGTH_LONG).show();
     }
 
-    /**
-     * Thực hiện đăng xuất người dùng khỏi Firebase và Google.
-     * @param context Context để thực hiện các hành động
-     */
     public static void signOut(Context context) {
-        // Đăng xuất khỏi Firebase
         FirebaseAuth.getInstance().signOut();
 
-        // Đăng xuất khỏi Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(context.getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -108,19 +151,10 @@ public class AuthManager {
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(context, gso);
         googleSignInClient.signOut();
 
-        // Xóa thông tin đã lưu trong SharedPreferences
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove(KEY_USER_ROLE);
-        editor.remove(KEY_USER_EMAIL);
-        editor.apply();
+        prefs.edit().remove(KEY_USER_ROLE).apply();
     }
 
-    /**
-     * Lấy vai trò của người dùng hiện tại từ SharedPreferences.
-     * @param context Context để truy cập SharedPreferences
-     * @return Chuỗi vai trò ("admin", "author", hoặc "guest" nếu chưa đăng nhập)
-     */
     public static String getCurrentRole(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(KEY_USER_ROLE, ROLE_GUEST);

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,7 +8,7 @@
     android:background="@color/ueh_light_gray"
     tools:context=".ui.admin.AdminDashboardActivity">
 
-    <!-- 1. Thanh tiêu đề (App Bar) với màu xanh UEH -->
+    <!-- 1. Thanh tiêu đề (App Bar) -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -31,7 +32,7 @@
         android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Lời chào (ID được giữ nguyên) -->
+        <!-- Lời chào -->
         <TextView
             android:id="@+id/tv_admin_welcome"
             android:layout_width="match_parent"
@@ -44,10 +45,7 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- Các nút chức năng được đổi sang MaterialButton và có 3 màu khác nhau -->
-        <!-- ID của các nút được giữ nguyên -->
-
-        <!-- Nút 1: Màu Cam UEH -->
+        <!-- Nút Quản lý Danh mục -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_manage_categories"
             style="@style/Widget.MaterialComponents.Button"
@@ -59,7 +57,7 @@
             android:text="Quản lý Danh mục"
             android:textColor="@color/ueh_white" />
 
-        <!-- Nút 2: Màu Xanh UEH -->
+        <!-- Nút Quản lý Tài khoản (Quan trọng) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_manage_accounts"
             style="@style/Widget.MaterialComponents.Button"
@@ -71,7 +69,7 @@
             android:text="Quản lý Tài khoản"
             android:textColor="@color/ueh_white" />
 
-        <!-- Nút 3: Màu Xanh Đậm UEH -->
+        <!-- Nút Duyệt bài viết -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_review_articles"
             style="@style/Widget.MaterialComponents.Button"
@@ -82,14 +80,13 @@
             android:text="Duyệt bài viết"
             android:textColor="@color/ueh_white" />
 
-        <!-- Đẩy nút Đăng xuất xuống cuối -->
+        <!-- Phần đệm để đẩy nút Đăng xuất xuống cuối -->
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-
-        <!-- Nút đăng xuất (ID được giữ nguyên) -->
+        <!-- Nút đăng xuất -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_admin_logout"
             style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -100,7 +97,6 @@
             android:textColor="@color/ueh_orange"
             app:icon="@drawable/ic_logout"
             app:iconTint="@color/ueh_orange" />
-
 
     </LinearLayout>
 
