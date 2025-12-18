@@ -13,6 +13,8 @@ import hoatran.st.ueh.edu.uehnews.R;
 import hoatran.st.ueh.edu.uehnews.data.model.Article;
 import hoatran.st.ueh.edu.uehnews.data.repositories.ArticleRepository;
 import hoatran.st.ueh.edu.uehnews.ui.adapter.ArticleAdapter;
+// DỌN DẸP: Xóa import trỏ tới package "guest"
+// import hoatran.st.ueh.edu.uehnews.ui.guest.ArticleDetailActivity;
 
 public class ArticleSearchActivity extends AppCompatActivity {
 
@@ -39,6 +41,7 @@ public class ArticleSearchActivity extends AppCompatActivity {
     private void setupAdapter() {
         articleAdapter = new ArticleAdapter(new ArrayList<>());
         articleAdapter.setOnItemClickListener(article -> {
+            // Sắp tới, ArticleDetailActivity sẽ nằm cùng package này, nên không cần import
             Intent intent = new Intent(this, ArticleDetailActivity.class);
             intent.putExtra(ArticleDetailActivity.EXTRA_ARTICLE, article);
             startActivity(intent);

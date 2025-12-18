@@ -1,30 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- item_article.xml - Giao diện cho một bài viết trong danh sách -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:strokeWidth="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- 1. Hình ảnh của bài viết -->
         <ImageView
             android:id="@+id/image_view_article"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:scaleType="centerCrop" />
+            android:layout_height="190dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ueh_placeholder" /> <!-- Ảnh tạm -->
 
-        <TextView
-            android:id="@+id/text_view_article_title"
+        <!-- 2. Khối nội dung text -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
+            <!-- 2.1. Tag danh mục -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_article_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_category_orange"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="4dp"
+                android:textColor="@color/ueh_white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Sự kiện" />
+
+            <!-- 2.2. Tiêu đề bài viết -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/text_view_article_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textColor="@color/ueh_blue_dark"
+                android:textStyle="bold"
+                tools:text="UEH công bố kết quả tuyển sinh Đại học chính quy năm 2025" />
+
+            <!-- 2.3. Thông tin tác giả và ngày đăng -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/img_author_avatar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_default_avatar" />
+
+                <TextView
+                    android:id="@+id/tv_author_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android.textColor="#555555"
+                    android:textSize="13sp"
+                    tools:text="Phòng Marketing - Truyền thông" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tv_publish_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/ueh_text_secondary"
+                    android:textSize="12sp"
+                    tools:text="17/12/2025" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

@@ -22,7 +22,7 @@ public class FavoritesActivity extends AppCompatActivity {
     private RecyclerView recyclerViewFavorites;
     private ArticleAdapter articleAdapter;
     private DatabaseHelper dbHelper;
-    private TextView textViewEmpty;
+    private TextView textViewEmptyFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,8 @@ public class FavoritesActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(this);
 
         recyclerViewFavorites = findViewById(R.id.recycler_view_favorites);
-        textViewEmpty = findViewById(R.id.text_view_empty);
+        // SỬA LỖI: Sử dụng đúng ID từ file layout là text_view_empty
+        textViewEmptyFavorites = findViewById(R.id.text_view_empty);
         recyclerViewFavorites.setLayoutManager(new LinearLayoutManager(this));
 
         setupAdapter();
@@ -60,10 +61,10 @@ public class FavoritesActivity extends AppCompatActivity {
 
         if (favoriteArticles.isEmpty()) {
             recyclerViewFavorites.setVisibility(View.GONE);
-            textViewEmpty.setVisibility(View.VISIBLE);
+            textViewEmptyFavorites.setVisibility(View.VISIBLE);
         } else {
             recyclerViewFavorites.setVisibility(View.VISIBLE);
-            textViewEmpty.setVisibility(View.GONE);
+            textViewEmptyFavorites.setVisibility(View.GONE);
         }
     }
 }

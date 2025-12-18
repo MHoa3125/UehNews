@@ -16,8 +16,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import hoatran.st.ueh.edu.uehnews.R;
 import hoatran.st.ueh.edu.uehnews.data.model.Article;
+// DỌN DẸP: Xóa bỏ hoàn toàn import không cần thiết
 
 public class HomeArticleAdapter extends RecyclerView.Adapter<HomeArticleAdapter.HomeArticleViewHolder> {
 
@@ -36,7 +38,7 @@ public class HomeArticleAdapter extends RecyclerView.Adapter<HomeArticleAdapter.
     @NonNull
     @Override
     public HomeArticleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_home_article, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_article, parent, false);
         return new HomeArticleViewHolder(view);
     }
 
@@ -53,46 +55,40 @@ public class HomeArticleAdapter extends RecyclerView.Adapter<HomeArticleAdapter.
 
     static class HomeArticleViewHolder extends RecyclerView.ViewHolder {
         ImageView ivImage;
-        TextView tvTitle, tvAuthor, tvDate, tvSummary;
+        TextView tvCategory, tvTitle, tvAuthorName, tvPublishDate;
+        CircleImageView civAuthorAvatar;
 
         public HomeArticleViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivImage = itemView.findViewById(R.id.iv_home_article_image);
-            tvTitle = itemView.findViewById(R.id.tv_home_article_title);
-            tvAuthor = itemView.findViewById(R.id.tv_home_article_author);
-            tvDate = itemView.findViewById(R.id.tv_home_article_date);
-            tvSummary = itemView.findViewById(R.id.tv_home_article_summary);
+            ivImage = itemView.findViewById(R.id.image_view_article);
+            tvCategory = itemView.findViewById(R.id.tv_article_category);
+            tvTitle = itemView.findViewById(R.id.text_view_article_title);
+            tvAuthorName = itemView.findViewById(R.id.tv_author_name);
+            tvPublishDate = itemView.findViewById(R.id.tv_publish_date);
+            civAuthorAvatar = itemView.findViewById(R.id.img_author_avatar);
         }
 
         public void bind(final Article article, final OnArticleClickListener listener) {
             tvTitle.setText(article.getTitle());
-            tvSummary.setText(article.getContent()); // Tạm thời hiển thị content làm summary
+            tvAuthorName.setText(article.getAuthorName() != null ? article.getAuthorName() : "N/A");
+            tvCategory.setText(article.getCategoryName() != null ? article.getCategoryName() : "Tin tức");
 
-            // Hiển thị tên tác giả hoặc email nếu không có tên
-            String author = article.getAuthorName();
-            if (author == null || author.isEmpty()) {
-                author = article.getAuthorEmail();
-            }
-            tvAuthor.setText(author);
-
-            // Hiển thị ngày
             if (article.getCreatedAt() > 0) {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                tvDate.setText("• " + sdf.format(new Date(article.getCreatedAt())));
-            }
-
-            // Hiển thị ảnh
-            if (article.getImageUrl() != null && !article.getImageUrl().isEmpty()) {
-                Glide.with(itemView.getContext())
-                        .load(article.getImageUrl())
-                        .centerCrop()
-                        .placeholder(R.drawable.ic_image_placeholder)
-                        .into(ivImage);
+                tvPublishDate.setText(sdf.format(new Date(article.getCreatedAt())));
             } else {
-                ivImage.setImageResource(R.drawable.ic_image_placeholder);
+                tvPublishDate.setText("");
             }
 
-            itemView.setOnClickListener(v -> listener.onArticleClick(article));
+            Glide.with(itemView.getContext()).load(article.getImageUrl()).centerCrop().placeholder(R.drawable.ueh_placeholder).into(ivImage);
+            Glide.with(itemView.getContext()).load(article.getAuthorAvatarUrl()).placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar).into(civAuthorAvatar);
+
+            // SỬA LỖI: Khôi phục lại cách xử lý sự kiện click đúng
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onArticleClick(article);
+                }
+            });
         }
     }
 }

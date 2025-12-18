@@ -3,13 +3,10 @@ package hoatran.st.ueh.edu.uehnews.ui.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -41,16 +38,7 @@ public class UserCategoryAdapter extends RecyclerView.Adapter<UserCategoryAdapte
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
         Category category = categoryList.get(position);
         holder.tvName.setText(category.getName());
-
-        if (category.getImageUrl() != null && !category.getImageUrl().isEmpty()) {
-            Glide.with(holder.itemView.getContext())
-                    .load(category.getImageUrl())
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_image_placeholder)
-                    .into(holder.ivImage);
-        } else {
-            holder.ivImage.setImageResource(R.drawable.ic_image_placeholder);
-        }
+        // Thao tác với ImageView đã được xóa bỏ một cách an toàn
 
         holder.itemView.setOnClickListener(v -> listener.onCategoryClick(category));
     }
@@ -60,14 +48,13 @@ public class UserCategoryAdapter extends RecyclerView.Adapter<UserCategoryAdapte
         return categoryList.size();
     }
 
+    // ViewHolder đã được cập nhật để không còn chứa ImageView
     static class CategoryViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivImage;
         TextView tvName;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Sửa lỗi: Thêm dòng ánh xạ view ở đây
-            ivImage = itemView.findViewById(R.id.iv_category_image);
+            // Đã xóa bỏ findViewById cho ImageView
             tvName = itemView.findViewById(R.id.tv_category_name_user);
         }
     }

@@ -1,4 +1,3 @@
-// ĐƯỜNG DẪN: app/src/main/java/hoatran/st/ueh/edu/uehnews/ui/profile/ProfileFragment.java
 package hoatran.st.ueh.edu.uehnews.ui.profile;
 
 import android.content.Intent;
@@ -8,11 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,6 +30,7 @@ import hoatran.st.ueh.edu.uehnews.ui.author.AuthorDashboardActivity;
 import hoatran.st.ueh.edu.uehnews.ui.author.MyArticlesActivity;
 import hoatran.st.ueh.edu.uehnews.ui.auth.AuthManager;
 import hoatran.st.ueh.edu.uehnews.ui.auth.LoginActivity;
+import hoatran.st.ueh.edu.uehnews.util.SettingsManager;
 
 public class ProfileFragment extends Fragment {
 
@@ -35,16 +41,13 @@ public class ProfileFragment extends Fragment {
             return null;
         }
 
-        // 1. Kiểm tra vai trò người dùng từ AuthManager
         String userRole = AuthManager.getCurrentRole(getContext());
 
         View view;
         if (AuthManager.ROLE_GUEST.equals(userRole)) {
-            // --- GIAO DIỆN CHO KHÁCH (GUEST) ---
             view = inflater.inflate(R.layout.main_profile_guest, container, false);
             setupGuestView(view);
         } else {
-            // --- GIAO DIỆN CHO NGƯỜI DÙNG ĐÃ ĐĂNG NHẬP (ADMIN/AUTHOR) ---
             view = inflater.inflate(R.layout.main_profile_user, container, false);
             setupUserView(view, userRole);
         }
@@ -52,9 +55,6 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Cài đặt các sự kiện cho giao diện Guest
-     */
     private void setupGuestView(View view) {
         TextView btnSavedArticles = view.findViewById(R.id.btn_saved_articles);
         TextView btnRecentArticles = view.findViewById(R.id.btn_recent_articles);
@@ -63,13 +63,52 @@ public class ProfileFragment extends Fragment {
         btnSavedArticles.setOnClickListener(v -> startActivity(new Intent(getActivity(), FavoritesActivity.class)));
         btnRecentArticles.setOnClickListener(v -> startActivity(new Intent(getActivity(), HistoryActivity.class)));
         btnGoToLogin.setOnClickListener(v -> startActivity(new Intent(getActivity(), LoginActivity.class)));
+
+        SwitchMaterial switchDarkMode = view.findViewById(R.id.switch_dark_mode);
+        SeekBar seekBarFontSize = view.findViewById(R.id.seekbar_font_size);
+
+        if (getContext() != null) {
+            int savedProgress = SettingsManager.getFontSize(getContext());
+            seekBarFontSize.setProgress(savedProgress);
+
+            boolean isDarkMode = SettingsManager.isDarkMode(getContext());
+            switchDarkMode.setChecked(isDarkMode);
+        }
+
+        switchDarkMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (getContext() != null) {
+                SettingsManager.saveDarkMode(getContext(), isChecked);
+                if (isChecked) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+            }
+        });
+
+        seekBarFontSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // Method này bắt buộc phải có, nhưng chúng ta không cần làm gì ở đây
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Method này bắt buộc phải có, nhưng chúng ta không cần làm gì ở đây
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (getContext() != null) {
+                    int progress = seekBar.getProgress();
+                    SettingsManager.saveFontSize(getContext(), progress);
+                    Toast.makeText(getContext(), "Đã lưu cỡ chữ!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    /**
-     * Cài đặt các sự kiện và hiển thị thông tin cho giao diện User (Admin/Author)
-     */
     private void setupUserView(View view, String userRole) {
-        // Ánh xạ các view từ layout main_profile_user.xml
         ImageView userAvatar = view.findViewById(R.id.iv_user_avatar);
         TextView userName = view.findViewById(R.id.tv_user_name);
         TextView userEmail = view.findViewById(R.id.tv_user_email);
@@ -81,7 +120,6 @@ public class ProfileFragment extends Fragment {
         Button btnRecentArticles = view.findViewById(R.id.btn_recent_articles_user);
         Button btnLogout = view.findViewById(R.id.btn_logout);
 
-        // 1. Lấy thông tin người dùng từ Firebase Auth để hiển thị
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             userName.setText(currentUser.getDisplayName());
@@ -91,7 +129,6 @@ public class ProfileFragment extends Fragment {
             }
         }
 
-        // 2. Phân quyền hiển thị các nút chức năng
         if (AuthManager.ROLE_ADMIN.equals(userRole)) {
             btnAdminDashboard.setVisibility(View.VISIBLE);
             btnAuthorDashboard.setVisibility(View.GONE);
@@ -102,7 +139,6 @@ public class ProfileFragment extends Fragment {
             btnMyArticles.setVisibility(View.VISIBLE);
         }
 
-        // 3. Cài đặt OnClickListener cho tất cả các nút
         btnAdminDashboard.setOnClickListener(v -> startActivity(new Intent(getActivity(), AdminDashboardActivity.class)));
         btnAuthorDashboard.setOnClickListener(v -> startActivity(new Intent(getActivity(), AuthorDashboardActivity.class)));
         btnMyArticles.setOnClickListener(v -> startActivity(new Intent(getActivity(), MyArticlesActivity.class)));
@@ -112,7 +148,6 @@ public class ProfileFragment extends Fragment {
         btnLogout.setOnClickListener(v -> {
             if (getContext() != null) {
                 AuthManager.signOut(getContext());
-                // Quay về trang chủ và làm mới lại stack activity
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
