@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android.textColor="#555555"
+                    android:textColor="#555555"
                     android:textSize="13sp"
                     tools:text="Phòng Marketing - Truyền thông" />
 
