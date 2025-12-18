@@ -40,7 +40,9 @@ public class AuthManager {
     private static final Set<String> ADMIN_EMAILS = new HashSet<>(Arrays.asList(
             "admin1@ueh.edu.vn",
             "hoatran.31231023175@st.ueh.edu.vn",
-            "nntnguyen1885@gmail.com"
+            "nguyennguyen.31231027057@st.ueh.edu.vn",
+            "quynhle.31231027234@st.ueh.edu.vn",
+            "nhungnguyen.31231026625@st.ueh.edu.vn"
     ));
 
     public static void handleLoginSuccess(Activity activity, FirebaseUser user) {

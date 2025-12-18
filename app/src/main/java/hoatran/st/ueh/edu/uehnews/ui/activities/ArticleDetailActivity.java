@@ -22,7 +22,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import hoatran.st.ueh.edu.uehnews.R;
 import hoatran.st.ueh.edu.uehnews.data.local.DatabaseHelper;
 import hoatran.st.ueh.edu.uehnews.data.model.Article;
-import hoatran.st.ueh.edu.uehnews.util.SettingsManager; // BƯỚC 1: Import SettingsManager
+import hoatran.st.ueh.edu.uehnews.util.SettingsManager;
 
 public class ArticleDetailActivity extends AppCompatActivity {
 
@@ -32,7 +32,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
     private DatabaseHelper dbHelper;
     private ImageView imageViewFavorite;
     private ImageView imageViewShare;
-    private TextView textViewDetailArticleContent; // Di chuyển ra ngoài để có thể truy cập
+    private TextView textViewDetailArticleContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
             initViews();
             populateUI();
             saveToHistory();
-            applyFontSize(); // BƯỚC 4: Gọi hàm áp dụng cỡ chữ
+            applyFontSize();
         } else {
             Toast.makeText(this, "Không thể tải bài viết", Toast.LENGTH_SHORT).show();
             finish();
@@ -88,24 +88,24 @@ public class ArticleDetailActivity extends AppCompatActivity {
     }
 
     /**
-     * BƯỚC 2: Tạo hàm mới để đọc và áp dụng cỡ chữ
+     * CẬP NHẬT CỠ CHỮ:
+     * Đọc lựa chọn của người dùng và áp dụng các mức cỡ chữ mới.
      */
     private void applyFontSize() {
         int progress = SettingsManager.getFontSize(this);
         float fontSize;
         switch (progress) {
             case 0: // Nhỏ
-                fontSize = 14f;
+                fontSize = 16f; // Tăng từ 14f
                 break;
             case 2: // Lớn
-                fontSize = 18f;
+                fontSize = 22f; // Tăng từ 18f
                 break;
             case 1: // Vừa (Mặc định)
             default:
-                fontSize = 16f;
+                fontSize = 19f; // Tăng từ 16f
                 break;
         }
-        // BƯỚC 3: Áp dụng cỡ chữ cho TextView nội dung
         textViewDetailArticleContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
     }
 
