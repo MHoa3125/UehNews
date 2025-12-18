@@ -16,6 +16,7 @@ import hoatran.st.ueh.edu.uehnews.R;
 import hoatran.st.ueh.edu.uehnews.data.local.DatabaseHelper;
 import hoatran.st.ueh.edu.uehnews.data.model.Article;
 import hoatran.st.ueh.edu.uehnews.ui.adapter.ArticleAdapter;
+// DỌN DẸP: Xóa import trỏ tới package "guest"
 
 public class HistoryActivity extends AppCompatActivity {
 

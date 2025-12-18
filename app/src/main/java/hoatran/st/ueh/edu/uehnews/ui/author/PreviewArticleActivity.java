@@ -34,8 +34,7 @@ public class PreviewArticleActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private Uri imageUri;
-    private String title;
-    private String content;
+    private String title, content, authorName;
 
     private FirebaseFirestore db;
     private FirebaseStorage storage;
@@ -50,6 +49,7 @@ public class PreviewArticleActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         auth = FirebaseAuth.getInstance();
 
+        // SỬA LỖI: Thêm lại đầy đủ các findViewById đã bị thiếu
         toolbar = findViewById(R.id.toolbar_preview);
         ivThumbnail = findViewById(R.id.iv_preview_thumbnail);
         tvTitle = findViewById(R.id.tv_preview_title);
@@ -67,11 +67,13 @@ public class PreviewArticleActivity extends AppCompatActivity {
         Intent intent = getIntent();
         title = intent.getStringExtra("title");
         content = intent.getStringExtra("content");
+        authorName = intent.getStringExtra("authorName");
         String imageUriString = intent.getStringExtra("imageUri");
         if (imageUriString != null) {
             imageUri = Uri.parse(imageUriString);
         }
 
+        // Bây giờ tvTitle và tvContent sẽ không còn null nữa
         tvTitle.setText(title);
         tvContent.setText(content);
         if (imageUri != null) {
@@ -88,21 +90,17 @@ public class PreviewArticleActivity extends AppCompatActivity {
             return;
         }
         setLoading(true);
-        uploadImageAndSaveArticle(title, content, status);
+        uploadImageAndSaveArticle(title, content, authorName, status);
     }
 
-    private void uploadImageAndSaveArticle(String title, String content, String status) {
-        // Sửa đường dẫn lưu ảnh thành 'articles/'
+    private void uploadImageAndSaveArticle(String title, String content, String authorName, String status) {
         String fileName = "articles/" + UUID.randomUUID().toString() + ".jpg";
         StorageReference imageRef = storage.getReference().child(fileName);
 
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     String imageUrl = uri.toString();
-                    saveArticleToFirestore(title, content, imageUrl, status);
-                }).addOnFailureListener(e -> {
-                    setLoading(false);
-                    Toast.makeText(this, "Lỗi lấy URL ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    saveArticleToFirestore(title, content, imageUrl, authorName, status);
                 }))
                 .addOnFailureListener(e -> {
                     setLoading(false);
@@ -110,7 +108,7 @@ public class PreviewArticleActivity extends AppCompatActivity {
                 });
     }
 
-    private void saveArticleToFirestore(String title, String content, String imageUrl, String status) {
+    private void saveArticleToFirestore(String title, String content, String imageUrl, String authorName, String status) {
         if (auth.getCurrentUser() == null) {
             setLoading(false);
             Toast.makeText(this, "Bạn cần đăng nhập để thực hiện thao tác này", Toast.LENGTH_SHORT).show();
@@ -126,12 +124,12 @@ public class PreviewArticleActivity extends AppCompatActivity {
         articleData.put("content", content);
         articleData.put("imageUrl", imageUrl);
         articleData.put("authorId", userId);
-        articleData.put("authorEmail", userEmail); // Thêm email tác giả
+        articleData.put("authorEmail", userEmail);
+        articleData.put("authorName", authorName);
         articleData.put("status", status);
-        articleData.put("createdAt", currentTime); // Thêm thời gian tạo
-        articleData.put("updatedAt", currentTime); // Thêm thời gian cập nhật
+        articleData.put("createdAt", currentTime);
+        articleData.put("updatedAt", currentTime);
 
-        // Sửa tên collection thành 'articles'
         db.collection("articles")
                 .add(articleData)
                 .addOnSuccessListener(documentReference -> {

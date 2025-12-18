@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Giao diện chi tiết bài viết TỐI ƯU CHO MÀN HÌNH XOAY NGANG (Responsive Design)
+  - Giữ nguyên ID của tất cả các view để tương thích với code Java.
+  - Giảm chiều cao ảnh bìa để ưu tiên không gian cho nội dung.
+  - Thêm lề ngang cho khối nội dung chính để tạo cột đọc hẹp hơn, dễ theo dõi hơn.
+-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ueh_white"
+    tools:context=".ui.guest.ArticleDetailActivity">
+
+    <!-- 1. Thanh công cụ (Toolbar) -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ueh_blue"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_article_detail"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 2. Nội dung có thể cuộn -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Ảnh bìa - Giảm chiều cao cho màn hình ngang -->
+            <ImageView
+                android:id="@+id/image_view_detail_article"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" 
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ueh_placeholder" />
+
+            <!-- Khối nội dung chính - Thêm lề ngang để dễ đọc hơn -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="80dp" 
+                android:paddingEnd="80dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <!-- Khối thông tin Header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Tag danh mục -->
+                    <TextView
+                        android:id="@+id/tv_detail_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_category_orange"
+                        android:paddingStart="10dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="4dp"
+                        android:textColor="@color/ueh_white"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:text="Sự kiện" />
+
+                    <!-- Tiêu đề bài viết -->
+                    <TextView
+                        android:id="@+id/text_view_detail_article_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:textColor="@color/ueh_blue_dark"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        tools:text="UEH công bố kết quả tuyển sinh Đại học chính quy năm 2025" />
+
+                    <!-- Thông tin tác giả và ngày đăng -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_vertical">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/img_detail_author_avatar"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_default_avatar" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/text_view_detail_article_author"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/black"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                tools:text="Phòng Marketing - Truyền thông" />
+
+                            <TextView
+                                android:id="@+id/text_view_detail_article_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:textColor="@color/ueh_text_secondary"
+                                android:textSize="13sp"
+                                tools:text="17/12/2025" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/image_view_share"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_share"
+                            android:contentDescription="Chia sẻ bài viết"/>
+
+                        <ImageView
+                            android:id="@+id/image_view_favorite"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="4dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_favorite_border"
+                            android:contentDescription="Lưu vào yêu thích"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Đường kẻ ngang -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E0E0E0"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp" />
+
+                <!-- Nội dung bài viết -->
+                <TextView
+                    android:id="@+id/text_view_detail_article_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    tools:text="Nội dung chi tiết của bài viết..." />
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- BỘ MÀU CHO CHẾ ĐỘ TỐI (NIGHT MODE) -->
+
+    <!-- Màu thương hiệu UEH (giữ nguyên) -->
+    <color name="ueh_blue">#005F69</color>
+    <color name="ueh_orange">#F26F33</color>
+    <color name="ueh_blue_dark">#E0E0E0</color>      <!-- Chữ chính: Đổi từ đen sang xám nhạt -->
+
+    <!-- Màu nền và chữ cho giao diện tối -->
+    <color name="ueh_white">#121212</color>           <!-- Nền chính: Đổi từ trắng sang đen -->
+    <color name="ueh_light_gray">#1E1E1E</color>   <!-- Nền phụ/Card: Đổi từ xám sáng sang xám đậm -->
+    <color name="ueh_text_secondary">#BDBDBD</color> <!-- Chữ phụ: Đổi từ xám đậm sang xám nhạt -->
+    <color name="ueh_text_gray">#9E9E9E</color>
+
+</resources>
