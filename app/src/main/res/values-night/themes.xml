@@ -1,7 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.UehNews" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <!-- Base application theme for dark mode. -->
+    <style name="Base.Theme.UehNews" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/ueh_blue</item>
+        <item name="colorPrimaryVariant">@color/ueh_blue_dark</item>
+        <item name="colorOnPrimary">@color/ueh_white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/ueh_orange</item>
+        <item name="colorSecondaryVariant">@color/ueh_orange</item>
+        <item name="colorOnSecondary">@color/ueh_white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/ueh_blue</item>
+        <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.UehNews" parent="Base.Theme.UehNews" />
 </resources>
