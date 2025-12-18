@@ -7,12 +7,10 @@
     android:background="@color/ueh_white"
     tools:context=".ui.guest.ArticleDetailActivity">
 
-    <!-- 1. Thanh công cụ (Toolbar) -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ueh_blue"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:background="@color/ueh_blue">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_article_detail"
@@ -22,7 +20,6 @@
             app:title="" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- 2. Nội dung có thể cuộn -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,7 +30,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Ảnh bìa -->
             <ImageView
                 android:id="@+id/image_view_detail_article"
                 android:layout_width="match_parent"
@@ -41,14 +37,12 @@
                 android:scaleType="centerCrop"
                 tools:src="@drawable/ueh_placeholder" />
 
-            <!-- Khối thông tin Header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <!-- Tag danh mục -->
                 <TextView
                     android:id="@+id/tv_detail_category"
                     android:layout_width="wrap_content"
@@ -63,7 +57,6 @@
                     android:textStyle="bold"
                     tools:text="Sự kiện" />
 
-                <!-- Tiêu đề bài viết -->
                 <TextView
                     android:id="@+id/text_view_detail_article_title"
                     android:layout_width="match_parent"
@@ -72,9 +65,8 @@
                     android:textColor="@color/ueh_blue_dark"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    tools:text="UEH công bố kết quả tuyển sinh Đại học chính quy năm 2025" />
+                    tools:text="UEH công bố kết quả tuyển sinh..." />
 
-                <!-- Thông tin tác giả và ngày đăng -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +90,7 @@
                             android:id="@+id/text_view_detail_article_author"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"
+                            android:textColor="@color/ueh_text_primary" 
                             android:textSize="15sp"
                             android:textStyle="bold"
                             tools:text="Phòng Marketing - Truyền thông" />
@@ -113,17 +105,14 @@
                             tools:text="17/12/2025" />
                     </LinearLayout>
 
-                    <!-- SỬA LỖI: Thêm lại nút Share -->
                     <ImageView
                         android:id="@+id/image_view_share"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:padding="10dp"
-                        android:src="@drawable/ic_share"
-                        android:contentDescription="Chia sẻ bài viết"/>
+                        android:src="@drawable/ic_share"/>
 
-                    <!-- Nút Favorite -->
                     <ImageView
                         android:id="@+id/image_view_favorite"
                         android:layout_width="48dp"
@@ -131,12 +120,10 @@
                         android:layout_marginStart="4dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:padding="10dp"
-                        android:src="@drawable/ic_favorite_border"
-                        android:contentDescription="Lưu vào yêu thích"/>
+                        android:src="@drawable/ic_favorite_border"/>
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Đường kẻ ngang -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -144,14 +131,13 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp" />
 
-            <!-- Nội dung bài viết -->
             <TextView
                 android:id="@+id/text_view_detail_article_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:lineSpacingExtra="6dp"
-                android:textColor="#333333"
+                android:textColor="@color/ueh_text_primary"
                 android:textSize="16sp"
                 tools:text="Nội dung chi tiết của bài viết..." />
 

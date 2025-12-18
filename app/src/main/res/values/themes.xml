@@ -1,8 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.UehNews" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/ueh_blue</item>
+        <item name="colorPrimaryVariant">@color/ueh_blue_dark</item>
+        <item name="colorOnPrimary">@color/ueh_white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/ueh_orange</item>
+        <item name="colorSecondaryVariant">@color/ueh_orange</item> <!-- Có thể là một biến thể đậm hơn của màu cam -->
+        <item name="colorOnSecondary">@color/ueh_white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/ueh_blue</item>
+        <!-- Customize your theme here. -->
     </style>
 
     <style name="Theme.UehNews" parent="Base.Theme.UehNews" />

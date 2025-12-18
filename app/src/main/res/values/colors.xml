@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Màu chính thức UEH -->
-    <color name="ueh_blue">#005F69</color>        <!-- PANTONE 7715C -->
-    <color name="ueh_orange">#F26F33</color>      <!-- PANTONE 1645C -->
+    <color name="ueh_blue">#005F69</color>
+    <color name="ueh_orange">#F26F33</color>
     <color name="ueh_blue_dark">#003840</color>
+
+    <!-- Màu nền và chữ cho chế độ SÁNG -->
     <color name="ueh_white">#FFFFFF</color>
     <color name="ueh_light_gray">#F5F5F5</color>
-    <color name="ueh_text_secondary">#888888</color>
-
-    <!-- SỬA LỖI: Bổ sung màu còn thiếu mà tôi đã dùng ở layout -->
+    <color name="ueh_text_primary">#212121</color>      <!-- MÀU CHỮ CHÍNH MỚI (Đen) -->
+    <color name="ueh_text_secondary">#757575</color>
     <color name="ueh_text_gray">#616161</color>
 
 </resources>
