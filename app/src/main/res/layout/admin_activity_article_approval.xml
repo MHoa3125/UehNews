@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
-        android:background="?attr/colorPrimary"
         android:gravity="center"
         android:text="DUYỆT BÀI VIẾT"
+        android:background="@color/ueh_blue"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold" />
