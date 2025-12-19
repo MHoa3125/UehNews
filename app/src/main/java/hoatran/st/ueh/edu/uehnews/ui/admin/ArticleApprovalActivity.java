@@ -1,15 +1,11 @@
 package hoatran.st.ueh.edu.uehnews.ui.admin;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +16,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import hoatran.st.ueh.edu.uehnews.R;
 import hoatran.st.ueh.edu.uehnews.data.model.Article;
@@ -28,37 +25,34 @@ public class ArticleApprovalActivity extends AppCompatActivity {
 
     private static final String TAG = "ArticleApprovalActivity";
     private RecyclerView recyclerView;
-    private PendingArticleAdapter adapter;
-    private ArrayList<Article> articleList;
+    private PendingArticleAdapter adapter; // Giữ nguyên tên adapter gốc của bạn
+    private List<Article> articleList;
     private FirebaseFirestore db;
     private ProgressBar progressBar;
-
-    private final ActivityResultLauncher<Intent> previewLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Log.d(TAG, "Nhận được kết quả thành công, đang tải lại danh sách...");
-                    fetchPendingArticles();
-                }
-            });
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_activity_article_approval);
 
+        // ======================= SỬA LỖI Ở ĐÂY =======================
+        // Trỏ đến tên file layout đã được đổi tên và đồng bộ
+        setContentView(R.layout.admin_activity_article_approval);
+        // =============================================================
+
+        // Khởi tạo Firebase
         db = FirebaseFirestore.getInstance();
 
-        // SỬA LỖI: Đã bỏ đi phần xử lý Toolbar không tồn tại
-
+        // Ánh xạ View
         recyclerView = findViewById(R.id.recycler_view_pending_articles);
         progressBar = findViewById(R.id.progress_bar_loading);
 
+        // Cài đặt RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         articleList = new ArrayList<>();
-        adapter = new PendingArticleAdapter(this, articleList, previewLauncher);
+        adapter = new PendingArticleAdapter(this, (ArrayList<Article>) articleList);
         recyclerView.setAdapter(adapter);
 
+        // Bắt đầu lấy dữ liệu
         fetchPendingArticles();
     }
 
@@ -89,8 +83,8 @@ public class ArticleApprovalActivity extends AppCompatActivity {
                             Toast.makeText(this, "Không có bài viết nào đang chờ duyệt.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Log.w(TAG, "Lỗi khi lấy tài liệu: ", task.getException());
-                        Toast.makeText(this, "Không thể tải danh sách.", Toast.LENGTH_LONG).show();
+                        Log.w(TAG, "Lỗi khi lấy tài liệu (HÃY KIỂM TRA INDEX TRÊN FIREBASE): ", task.getException());
+                        Toast.makeText(this, "Không thể tải danh sách. Vui lòng kiểm tra Logcat.", Toast.LENGTH_LONG).show();
                     }
                 });
     }
