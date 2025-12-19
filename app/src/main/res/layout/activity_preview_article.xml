@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,22 +7,24 @@
     tools:context=".ui.author.PreviewArticleActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_preview" 
+            android:id="@+id/toolbar_preview"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/ueh_blue"
             app:title="Xem trước bài viết"
-            app:navigationIcon="@drawable/ic_arrow_back" />
+            app:navigationIcon="?attr/homeAsUpIndicator" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appbar_layout">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,9 +35,10 @@
             <ImageView
                 android:id="@+id/iv_preview_thumbnail"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="220dp"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/ueh_placeholder" />
+                android:background="@color/material_grey_300"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
             <TextView
                 android:id="@+id/tv_preview_title"
@@ -44,50 +47,55 @@
                 android:layout_marginTop="16dp"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                tools:text="Tiêu đề bài viết" />
+                android:textColor="@android:color/black"
+                tools:text="Đây là tiêu đề bài viết xem trước" />
 
             <TextView
                 android:id="@+id/tv_preview_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:lineSpacingExtra="4dp"
                 android:textSize="16sp"
-                tools:text="Nội dung bài viết..." />
+                tools:text="Đây là nội dung chi tiết của bài viết xem trước. Nội dung này sẽ được hiển thị ở đây để tác giả có thể đọc lại và kiểm tra lỗi chính tả cũng như định dạng trước khi quyết định gửi bài đi duyệt hoặc lưu lại làm bản nháp." />
 
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:background="@android:color/white">
 
         <Button
             android:id="@+id/btn_preview_save_draft"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="?attr/materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="Lưu nháp" />
+            android:layout_marginEnd="4dp"
+            android:text="Lưu nháp"
+            android:textColor="@color/ueh_blue"
+            app:strokeColor="@color/ueh_blue"/>
 
         <Button
             android:id="@+id/btn_preview_submit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:text="Gửi duyệt" />
+            android:layout_marginStart="4dp"
+            android:text="Gửi duyệt"
+            android:backgroundTint="@color/ueh_blue"/>
     </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar_preview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_gravity="center"
         android:visibility="gone" />
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

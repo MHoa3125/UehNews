@@ -39,6 +39,7 @@
             android:name=".ui.admin.AdminDashboardActivity"
             android:exported="false" />
 
+        <!-- SỬA LỖI: Thêm khai báo cho ManageAuthorsActivity -->
         <activity
             android:name=".ui.admin.ManageAuthorsActivity"
             android:exported="false"
@@ -49,12 +50,6 @@
             android:name=".ui.admin.ArticleApprovalActivity"
             android:exported="false"
             android:parentActivityName=".ui.admin.AdminDashboardActivity"/>
-
-        <!-- SỬA LỖI: Thêm khai báo cho màn hình xem trước của Admin -->
-        <activity
-            android:name=".ui.admin.AdminPreviewActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.admin.ArticleApprovalActivity"/>
 
         <activity
             android:name=".ui.admin.ManageCategoriesActivity"
