@@ -16,43 +16,37 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import hoatran.st.ueh.edu.uehnews.R;
 import hoatran.st.ueh.edu.uehnews.data.model.Article;
 
-public class ArticleApprovalActivity extends AppCompatActivity {
+// SỬA LỖI: Implement interface để lắng nghe sự kiện từ Adapter
+public class ArticleApprovalActivity extends AppCompatActivity implements PendingArticleAdapter.OnArticleUpdateListener {
 
     private static final String TAG = "ArticleApprovalActivity";
     private RecyclerView recyclerView;
-    private PendingArticleAdapter adapter; // Giữ nguyên tên adapter gốc của bạn
-    private List<Article> articleList;
+    private PendingArticleAdapter adapter;
+    private ArrayList<Article> articleList;
     private FirebaseFirestore db;
     private ProgressBar progressBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // ======================= SỬA LỖI Ở ĐÂY =======================
-        // Trỏ đến tên file layout đã được đổi tên và đồng bộ
         setContentView(R.layout.admin_activity_article_approval);
-        // =============================================================
 
-        // Khởi tạo Firebase
         db = FirebaseFirestore.getInstance();
 
-        // Ánh xạ View
         recyclerView = findViewById(R.id.recycler_view_pending_articles);
         progressBar = findViewById(R.id.progress_bar_loading);
 
-        // Cài đặt RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         articleList = new ArrayList<>();
-        adapter = new PendingArticleAdapter(this, (ArrayList<Article>) articleList);
+        
+        // SỬA LỖI: Cung cấp tham số thứ 3 (this) cho constructor của Adapter
+        adapter = new PendingArticleAdapter(this, articleList, this);
         recyclerView.setAdapter(adapter);
 
-        // Bắt đầu lấy dữ liệu
         fetchPendingArticles();
     }
 
@@ -83,9 +77,17 @@ public class ArticleApprovalActivity extends AppCompatActivity {
                             Toast.makeText(this, "Không có bài viết nào đang chờ duyệt.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Log.w(TAG, "Lỗi khi lấy tài liệu (HÃY KIỂM TRA INDEX TRÊN FIREBASE): ", task.getException());
-                        Toast.makeText(this, "Không thể tải danh sách. Vui lòng kiểm tra Logcat.", Toast.LENGTH_LONG).show();
+                        Log.w(TAG, "Lỗi khi lấy tài liệu: ", task.getException());
+                        Toast.makeText(this, "Không thể tải danh sách.", Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+
+    // SỬA LỖI: Override lại phương thức onArticleUpdated từ interface
+    @Override
+    public void onArticleUpdated() {
+        Log.d(TAG, "Nhận được tín hiệu cập nhật từ Adapter. Tải lại danh sách...");
+        // Khi Adapter báo đã cập nhật xong (duyệt/từ chối), chúng ta sẽ tải lại danh sách
+        fetchPendingArticles();
     }
 }
