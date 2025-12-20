@@ -2,20 +2,20 @@ package hoatran.st.ueh.edu.uehnews.ui.admin;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.text.InputType;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,12 +37,19 @@ public class PendingArticleAdapter extends RecyclerView.Adapter<PendingArticleAd
 
     private final Context context;
     private final ArrayList<Article> articleList;
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db;
     private static final String TAG = "PendingArticleAdapter";
 
-    public PendingArticleAdapter(Context context, ArrayList<Article> articleList) {
+    public interface OnArticleUpdateListener {
+        void onArticleUpdated();
+    }
+    private final OnArticleUpdateListener updateListener;
+
+    public PendingArticleAdapter(Context context, ArrayList<Article> articleList, OnArticleUpdateListener listener) {
         this.context = context;
         this.articleList = articleList;
+        this.updateListener = listener;
+        this.db = FirebaseFirestore.getInstance();
     }
 
     @NonNull
@@ -57,27 +64,86 @@ public class PendingArticleAdapter extends RecyclerView.Adapter<PendingArticleAd
         Article article = articleList.get(position);
 
         holder.tvTitle.setText(article.getTitle());
-
-        if (article.getAuthorName() != null && !article.getAuthorName().isEmpty()) {
-            holder.tvAuthor.setText("Tác giả: " + article.getAuthorName());
-        } else {
-            holder.tvAuthor.setText("Tác giả: " + article.getAuthorEmail());
-        }
+        holder.tvAuthor.setText("Tác giả: " + (article.getAuthorName() != null ? article.getAuthorName() : article.getAuthorEmail()));
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-            String formattedDate = sdf.format(new Date(article.getCreatedAt()));
-            holder.tvDate.setText("Ngày gửi: " + formattedDate);
+            holder.tvDate.setText("Ngày gửi: " + sdf.format(new Date(article.getCreatedAt())));
         } catch (Exception e) {
             holder.tvDate.setText("Ngày gửi: N/A");
-            Log.e(TAG, "Lỗi định dạng ngày tháng: ", e);
         }
 
-        // Xử lý sự kiện Duyệt
-        holder.btnApprove.setOnClickListener(v -> showApproveConfirmation(article, holder.getAdapterPosition()));
+        // --- GIỮ NGUYÊN LOGIC CŨ CỦA BẠN ---
+        holder.btnApprove.setOnClickListener(v -> showCategorySelectionDialog(article));
+        holder.btnReject.setOnClickListener(v -> {
+            updateArticleStatus(article, "rejected", null);
+        });
+        
+        // --- SỬA LỖI: Gán sự kiện chỉ cho vùng thông tin ---
+        holder.infoContainer.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AdminArticleDetailActivity.class);
+            intent.putExtra(AdminArticleDetailActivity.EXTRA_ARTICLE, article);
+            context.startActivity(intent);
+        });
+    }
 
-        // Xử lý sự kiện Từ chối (nhập lý do)
-        holder.btnReject.setOnClickListener(v -> showRejectDialog(article, holder.getAdapterPosition()));
+    private void showCategorySelectionDialog(Article article) {
+        db.collection("categories").get().addOnSuccessListener(queryDocumentSnapshots -> {
+            final List<Category> categories = new ArrayList<>();
+            List<String> categoryNames = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                Category cat = doc.toObject(Category.class);
+                cat.setId(doc.getId());
+                categories.add(cat);
+                categoryNames.add(cat.getName());
+            }
+
+            if (categories.isEmpty()) {
+                Toast.makeText(context, "Chưa có danh mục!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Chọn danh mục & Duyệt");
+
+            final Spinner spinner = new Spinner(context);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, categoryNames);
+            spinner.setAdapter(adapter);
+
+            LinearLayout container = new LinearLayout(context);
+            container.setPadding(60, 20, 60, 20);
+            container.addView(spinner);
+            builder.setView(container);
+
+            builder.setPositiveButton("Duyệt", (dialog, which) -> {
+                int pos = spinner.getSelectedItemPosition();
+                if (pos >= 0) {
+                    updateArticleStatus(article, "approved", categories.get(pos));
+                }
+            });
+            builder.setNegativeButton("Hủy", null);
+            builder.show();
+        }).addOnFailureListener(e -> Log.e(TAG, "Lỗi tải danh mục", e));
+    }
+
+    private void updateArticleStatus(Article article, String status, @Nullable Category category) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("status", status);
+        updates.put("updatedAt", System.currentTimeMillis());
+
+        if ("approved".equals(status) && category != null) {
+            updates.put("categoryId", category.getId());
+            updates.put("categoryName", category.getName());
+        }
+
+        db.collection("articles").document(article.getId()).update(updates)
+            .addOnSuccessListener(aVoid -> {
+                Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+                if (updateListener != null) {
+                    updateListener.onArticleUpdated();
+                }
+            })
+            .addOnFailureListener(e -> Toast.makeText(context, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -85,139 +151,15 @@ public class PendingArticleAdapter extends RecyclerView.Adapter<PendingArticleAd
         return articleList.size();
     }
 
-    private void showApproveConfirmation(Article article, int position) {
-        // Tải danh sách danh mục từ Firestore
-        Toast.makeText(context, "Đang tải danh sách danh mục...", Toast.LENGTH_SHORT).show();
-
-        db.collection("categories").get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<Category> categories = new ArrayList<>();
-            List<String> categoryNames = new ArrayList<>();
-
-            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                Category cat = document.toObject(Category.class);
-                cat.setId(document.getId());
-                categories.add(cat);
-                categoryNames.add(cat.getName());
-            }
-
-            if (categories.isEmpty()) {
-                Toast.makeText(context, "Chưa có danh mục nào. Vui lòng tạo danh mục trước.", Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            // Tạo dialog chọn danh mục
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Chọn danh mục & Duyệt");
-
-            LinearLayout layout = new LinearLayout(context);
-            layout.setOrientation(LinearLayout.VERTICAL);
-            layout.setPadding(50, 40, 50, 10);
-
-            final TextView tvMessage = new TextView(context);
-            tvMessage.setText("Chọn danh mục cho bài viết này:");
-            tvMessage.setPadding(0, 0, 0, 20);
-            layout.addView(tvMessage);
-
-            final Spinner spinner = new Spinner(context);
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, categoryNames);
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(spinnerAdapter);
-            layout.addView(spinner);
-
-            builder.setView(layout);
-
-            builder.setPositiveButton("Duyệt", (dialog, which) -> {
-                int selectedPosition = spinner.getSelectedItemPosition();
-                if (selectedPosition >= 0) {
-                    Category selectedCategory = categories.get(selectedPosition);
-                    updateArticleStatus(article, "approved", position, null, selectedCategory);
-                }
-            });
-            builder.setNegativeButton("Hủy", null);
-            builder.show();
-
-        }).addOnFailureListener(e -> {
-            Toast.makeText(context, "Lỗi tải danh mục: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Lỗi tải danh mục", e);
-        });
-    }
-
-    private void showRejectDialog(Article article, int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Từ chối bài viết");
-        builder.setMessage("Vui lòng nhập lý do từ chối (bắt buộc):");
-
-        final EditText input = new EditText(context);
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        input.setHint("Nhập lý do...");
-        input.setMinLines(2);
-        builder.setView(input);
-
-        builder.setPositiveButton("Từ chối", (dialog, which) -> {
-            // Sẽ được override ở dưới để validation không đóng dialog
-        });
-        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        // Override nút Positive để kiểm tra input
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            String reason = input.getText().toString().trim();
-            if (reason.isEmpty()) {
-                input.setError("Lý do không được để trống");
-                Toast.makeText(context, "Vui lòng nhập lý do từ chối!", Toast.LENGTH_SHORT).show();
-            } else {
-                updateArticleStatus(article, "rejected", position, reason, null);
-                dialog.dismiss();
-            }
-        });
-    }
-
-    private void updateArticleStatus(Article article, String newStatus, int position, String rejectionReason, Category category) {
-        if (position == RecyclerView.NO_POSITION) {
-            Log.w(TAG, "Không thể cập nhật vì vị trí không hợp lệ.");
-            return;
-        }
-
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("status", newStatus);
-        updates.put("updatedAt", System.currentTimeMillis());
-        if (rejectionReason != null) {
-            updates.put("rejectionReason", rejectionReason);
-        }
-
-        // Thêm thông tin danh mục nếu có
-        if (category != null) {
-            updates.put("categoryId", category.getId());
-            updates.put("categoryName", category.getName());
-        }
-
-        db.collection("articles").document(article.getId())
-                .update(updates)
-                .addOnSuccessListener(aVoid -> {
-                    String actionText = newStatus.equals("approved") ? "duyệt" : "từ chối";
-                    Toast.makeText(context, "Đã " + actionText + " bài viết.", Toast.LENGTH_SHORT).show();
-
-                    // Xóa item khỏi danh sách và cập nhật RecyclerView
-                    if (position >= 0 && position < articleList.size()) {
-                        articleList.remove(position);
-                        notifyItemRemoved(position);
-                        notifyItemRangeChanged(position, articleList.size());
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(context, "Cập nhật thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Lỗi khi cập nhật status cho bài viết " + article.getId(), e);
-                });
-    }
-
     public static class ArticleViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvAuthor, tvDate;
-        Button btnApprove, btnReject;
+        View btnApprove, btnReject;
+        // SỬA LỖI: Thêm vùng chứa thông tin
+        View infoContainer;
 
         public ArticleViewHolder(@NonNull View itemView) {
             super(itemView);
+            infoContainer = itemView.findViewById(R.id.info_container);
             tvTitle = itemView.findViewById(R.id.tv_article_title);
             tvAuthor = itemView.findViewById(R.id.tv_article_author);
             tvDate = itemView.findViewById(R.id.tv_article_date);

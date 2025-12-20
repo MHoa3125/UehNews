@@ -1,90 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="6dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <!-- Tiêu đề bài viết -->
-        <TextView
-            android:id="@+id/tv_article_title"
+        <!-- SỬA LỖI: Tạo vùng chứa riêng cho thông tin có thể nhấn vào -->
+        <LinearLayout
+            android:id="@+id/info_container" 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/ueh_blue_dark"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            tools:text="Đây là một tiêu đề bài viết rất dài để kiểm tra hiển thị trên nhiều dòng" />
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground">
 
-        <!-- Tác giả -->
-        <TextView
-            android:id="@+id/tv_article_author"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:textSize="14sp"
-            app:drawableTint="@color/ueh_blue"
-            tools:text="Tác giả: Nguyễn Văn A" />
+            <TextView
+                android:id="@+id/tv_article_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tiêu đề bài viết"
+                android:textColor="@color/ueh_blue_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <!-- Ngày gửi -->
-        <TextView
-            android:id="@+id/tv_article_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:textColor="@color/material_on_surface_disabled"
-            android:textSize="12sp"
-            app:drawableTint="@color/material_on_surface_disabled"
-            tools:text="Ngày gửi: 25/12/2025" />
+            <TextView
+                android:id="@+id/tv_article_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Tác giả: Nguyễn Văn A" />
 
-        <!-- Dải phân cách -->
+            <TextView
+                android:id="@+id/tv_article_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Ngày gửi: 01/01/2024" />
+        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
-            android:background="?android:attr/listDivider" />
+            android:background="#F0F0F0" />
 
-        <!-- Nút hành động -->
+        <!-- Các nút bấm nằm ngoài vùng có thể nhấn -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-            <!-- Nút Từ chối (màu cam, kiểu outlined) -->
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/btn_reject"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="Từ chối"
-                android:textColor="@color/ueh_orange"
-                app:strokeColor="@color/ueh_orange" />
+                android:text="Từ chối" />
 
-            <!-- Nút Duyệt (màu xanh, kiểu filled) -->
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/btn_approve"
-                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/ueh_blue"
                 android:text="Duyệt" />
         </LinearLayout>
 
