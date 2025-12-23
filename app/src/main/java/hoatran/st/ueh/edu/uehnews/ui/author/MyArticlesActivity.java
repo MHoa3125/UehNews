@@ -95,11 +95,20 @@ public class MyArticlesActivity extends AppCompatActivity {
                 });
     }
 
+    // SỬA LỖI: Thêm lý do từ chối vào dialog
     private void onArticleClick(Article article) {
-        // Chuyển tới màn hình chi tiết hoặc chỉnh sửa nếu cần
+        StringBuilder message = new StringBuilder();
+        message.append("Tiêu đề: ").append(article.getTitle());
+        message.append("\nTrạng thái: ").append(getStatusText(article.getStatus()));
+
+        // Nếu bài viết bị từ chối và có lý do, hiển thị lý do đó
+        if ("rejected".equals(article.getStatus()) && article.getRejectionReason() != null && !article.getRejectionReason().isEmpty()) {
+            message.append("\n\nLý do: ").append(article.getRejectionReason());
+        }
+
         new AlertDialog.Builder(this)
                 .setTitle("Chi tiết bài viết")
-                .setMessage("Tiêu đề: " + article.getTitle() + "\nTrạng thái: " + getStatusText(article.getStatus()))
+                .setMessage(message.toString())
                 .setPositiveButton("Đóng", null)
                 .show();
     }

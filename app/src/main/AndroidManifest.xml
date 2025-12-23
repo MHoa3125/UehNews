@@ -50,11 +50,11 @@
             android:exported="false"
             android:parentActivityName=".ui.admin.AdminDashboardActivity"/>
 
-        <!-- SỬA LỖI CRASH: Thêm khai báo cho Activity xem chi tiết của Admin -->
         <activity
             android:name=".ui.admin.AdminArticleDetailActivity"
             android:exported="false"
-            android:parentActivityName=".ui.admin.ArticleApprovalActivity"/>
+            android:parentActivityName=".ui.admin.ArticleApprovalActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"/>
 
         <activity
             android:name=".ui.admin.ManageCategoriesActivity"
@@ -92,7 +92,8 @@
         <activity
             android:name=".ui.activities.ArticleDetailActivity"
             android:exported="false"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
 
         <activity
             android:name=".ui.activities.ArticleSearchActivity"

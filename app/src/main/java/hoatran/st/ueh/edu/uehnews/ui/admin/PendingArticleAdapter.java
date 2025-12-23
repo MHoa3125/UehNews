@@ -3,12 +3,13 @@ package hoatran.st.ueh.edu.uehnews.ui.admin;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -73,13 +74,11 @@ public class PendingArticleAdapter extends RecyclerView.Adapter<PendingArticleAd
             holder.tvDate.setText("Ngày gửi: N/A");
         }
 
-        // --- GIỮ NGUYÊN LOGIC CŨ CỦA BẠN ---
         holder.btnApprove.setOnClickListener(v -> showCategorySelectionDialog(article));
-        holder.btnReject.setOnClickListener(v -> {
-            updateArticleStatus(article, "rejected", null);
-        });
         
-        // --- SỬA LỖI: Gán sự kiện chỉ cho vùng thông tin ---
+        // SỬA LỖI: Gọi dialog nhập lý do khi từ chối
+        holder.btnReject.setOnClickListener(v -> showRejectionReasonDialog(article));
+        
         holder.infoContainer.setOnClickListener(v -> {
             Intent intent = new Intent(context, AdminArticleDetailActivity.class);
             intent.putExtra(AdminArticleDetailActivity.EXTRA_ARTICLE, article);
@@ -99,7 +98,7 @@ public class PendingArticleAdapter extends RecyclerView.Adapter<PendingArticleAd
             }
 
             if (categories.isEmpty()) {
-                Toast.makeText(context, "Chưa có danh mục!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Chưa có danh mục nào!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -118,7 +117,7 @@ public class PendingArticleAdapter extends RecyclerView.Adapter<PendingArticleAd
             builder.setPositiveButton("Duyệt", (dialog, which) -> {
                 int pos = spinner.getSelectedItemPosition();
                 if (pos >= 0) {
-                    updateArticleStatus(article, "approved", categories.get(pos));
+                    updateArticleStatus(article, "approved", categories.get(pos), null);
                 }
             });
             builder.setNegativeButton("Hủy", null);
@@ -126,7 +125,34 @@ public class PendingArticleAdapter extends RecyclerView.Adapter<PendingArticleAd
         }).addOnFailureListener(e -> Log.e(TAG, "Lỗi tải danh mục", e));
     }
 
-    private void updateArticleStatus(Article article, String status, @Nullable Category category) {
+    // SỬA LỖI: Thêm dialog nhập lý do từ chối
+    private void showRejectionReasonDialog(Article article) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Nhập lý do từ chối");
+
+        final EditText input = new EditText(context);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        input.setHint("Ví dụ: Nội dung chưa phù hợp...");
+        LinearLayout container = new LinearLayout(context);
+        container.setPadding(60, 20, 60, 20);
+        container.addView(input);
+        builder.setView(container);
+
+        builder.setPositiveButton("Xác nhận", (dialog, which) -> {
+            String reason = input.getText().toString().trim();
+            if (reason.isEmpty()) {
+                Toast.makeText(context, "Vui lòng nhập lý do.", Toast.LENGTH_SHORT).show();
+            } else {
+                updateArticleStatus(article, "rejected", null, reason);
+            }
+        });
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    // SỬA LỖI: Thêm tham số `rejectionReason`
+    private void updateArticleStatus(Article article, String status, @Nullable Category category, @Nullable String rejectionReason) {
         Map<String, Object> updates = new HashMap<>();
         updates.put("status", status);
         updates.put("updatedAt", System.currentTimeMillis());
@@ -134,6 +160,11 @@ public class PendingArticleAdapter extends RecyclerView.Adapter<PendingArticleAd
         if ("approved".equals(status) && category != null) {
             updates.put("categoryId", category.getId());
             updates.put("categoryName", category.getName());
+        }
+
+        // SỬA LỖI: Thêm lý do từ chối vào object updates
+        if ("rejected".equals(status) && rejectionReason != null) {
+            updates.put("rejectionReason", rejectionReason);
         }
 
         db.collection("articles").document(article.getId()).update(updates)
@@ -154,7 +185,6 @@ public class PendingArticleAdapter extends RecyclerView.Adapter<PendingArticleAd
     public static class ArticleViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvAuthor, tvDate;
         View btnApprove, btnReject;
-        // SỬA LỖI: Thêm vùng chứa thông tin
         View infoContainer;
 
         public ArticleViewHolder(@NonNull View itemView) {
