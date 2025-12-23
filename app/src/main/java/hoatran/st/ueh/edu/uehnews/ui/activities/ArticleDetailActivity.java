@@ -33,6 +33,7 @@ public class ArticleDetailActivity extends AppCompatActivity {
     private ImageView imageViewFavorite;
     private ImageView imageViewShare;
     private TextView textViewDetailArticleContent;
+    private boolean isFavorite = false; // Biến để theo dõi trạng thái yêu thích
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,24 +88,13 @@ public class ArticleDetailActivity extends AppCompatActivity {
         Glide.with(this).load(article.getAuthorAvatarUrl()).placeholder(R.drawable.ic_default_avatar).error(R.drawable.ic_default_avatar).into(imgDetailAuthorAvatar);
     }
 
-    /**
-     * CẬP NHẬT CỠ CHỮ:
-     * Đọc lựa chọn của người dùng và áp dụng các mức cỡ chữ mới.
-     */
     private void applyFontSize() {
         int progress = SettingsManager.getFontSize(this);
         float fontSize;
         switch (progress) {
-            case 0: // Nhỏ
-                fontSize = 16f; // Tăng từ 14f
-                break;
-            case 2: // Lớn
-                fontSize = 22f; // Tăng từ 18f
-                break;
-            case 1: // Vừa (Mặc định)
-            default:
-                fontSize = 19f; // Tăng từ 16f
-                break;
+            case 0: fontSize = 16f; break;
+            case 2: fontSize = 22f; break;
+            case 1: default: fontSize = 19f; break;
         }
         textViewDetailArticleContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
     }
@@ -114,14 +104,47 @@ public class ArticleDetailActivity extends AppCompatActivity {
     }
 
     private void setupShareButton() {
-        // ... (code không đổi)
+        imageViewShare.setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("article_title", article.getTitle());
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, "Đã sao chép tiêu đề!", Toast.LENGTH_SHORT).show();
+        });
     }
 
+    // --- KHÔI PHỤC LOGIC CHO NÚT YÊU THÍCH ---
     private void setupFavoriteButton() {
-        // ... (code không đổi)
+        // 1. Kiểm tra trạng thái yêu thích ban đầu
+        if (article != null) {
+            isFavorite = dbHelper.isFavorite(article.getId());
+            updateFavoriteIcon();
+        }
+
+        // 2. Gán sự kiện click
+        imageViewFavorite.setOnClickListener(v -> {
+            if (article == null) return;
+
+            if (isFavorite) {
+                // Nếu đang là yêu thích -> Bỏ yêu thích
+                dbHelper.removeFavorite(article.getId());
+                Toast.makeText(this, "Đã xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
+            } else {
+                // Nếu chưa yêu thích -> Thêm vào yêu thích
+                dbHelper.addFavorite(article);
+                Toast.makeText(this, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
+            }
+
+            // 3. Cập nhật lại trạng thái và icon
+            isFavorite = !isFavorite;
+            updateFavoriteIcon();
+        });
     }
 
     private void updateFavoriteIcon() {
-        // ... (code không đổi)
+        if (isFavorite) {
+            imageViewFavorite.setImageResource(R.drawable.ic_favorite_filled);
+        } else {
+            imageViewFavorite.setImageResource(R.drawable.ic_favorite_border);
+        }
     }
 }
